@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "146818218152",
+    "project_id": "keepup-b2a8b",
+    "storage_bucket": "keepup-b2a8b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:146818218152:android:89bdb8bcd8cf839142ea9d",
+        "android_client_info": {
+          "package_name": "com.example.keep_up"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "146818218152-k7nd1u4laqbfeomv0fu9436cev6f02r8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.keep_up",
+            "certificate_hash": "1e2fdcc78575483e6890214ea9a61013c25e2409"
+          }
+        },
+        {
+          "client_id": "146818218152-hrcq6chavi7i0rfqi5l6lc7bc6ntpufl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUrvyjn2BfzkXpzLXCiksACiQ0_d8ECs0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "146818218152-hrcq6chavi7i0rfqi5l6lc7bc6ntpufl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
