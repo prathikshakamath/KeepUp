@@ -65,6 +65,7 @@ flutter:
   assets:
     - assets/google.svg
     - assets/phone.svg
+    - assets/profilephoto.jpg
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
