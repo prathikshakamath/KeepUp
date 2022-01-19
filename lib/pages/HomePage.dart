@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:keep_up/pages/AddTodo.dart';
 
 import '../Service/Auth_Service.dart';
@@ -15,6 +16,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   AuthClass authClass = AuthClass();
+  final Stream<QuerySnapshot> _stream =
+      FirebaseFirestore.instance.collection("Todo").snapshots();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,26 +73,27 @@ class _HomePageState extends State<HomePage> {
           ),
           BottomNavigationBarItem(
             icon: InkWell(
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (builder)=>AddToDoPage() ));
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (builder) => AddToDoPage()));
               },
               child: Container(
-              height: 52,
-              width: 52,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: LinearGradient(
-                  colors: [
-                    Colors.indigoAccent,
-                    Colors.purple,
-                  ],
-                ),
-              ),
-              child: Icon(
-                Icons.add,
-                size: 32,
-                color: Colors.white,
-              ),
+                  height: 52,
+                  width: 52,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.indigoAccent,
+                        Colors.purple,
+                      ],
+                    ),
+                  ),
+                  child: Icon(
+                    Icons.add,
+                    size: 32,
+                    color: Colors.white,
+                  )),
             ),
             title: Container(),
           ),
@@ -103,62 +107,63 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          padding: EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 20,
-          ),
-          child: Column(
-            children: [
-              TodoCard(
-                title: "Wake up bro",
-                check: true,
-                iconBgColor: Colors.white,
-                iconColor: Colors.red,
-                iconData: Icons.alarm,
-                time: "10AM",
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              TodoCard(
-                title: "Let's do Gym",
-                check: false,
-                iconBgColor: Color(0xff2cc8d9),
-                iconColor: Colors.white,
-                iconData: Icons.run_circle,
-                time: "11 AM",
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              TodoCard(
-                title: "Buy some food",
-                check: false,
-                iconBgColor: Color(0xff19733),
-                iconColor: Colors.white,
-                iconData: Icons.local_grocery_store,
-                time: "12 AM",
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              TodoCard(
-                title: "Testing something",
-                check: false,
-                iconBgColor: Color(0xffd3c2b9),
-                iconColor: Colors.white,
-                iconData: Icons.audiotrack,
+      body: StreamBuilder(
+          stream: _stream,
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Center(child: CircularProgressIndicator());
+            }
+            return ListView.builder(
+                itemCount: snapshot.data.docs.length,
+                itemBuilder: (context, index) {
+                  IconData iconData;
+                  Color iconColor;
+                  Map<String, dynamic> document =
+                      snapshot.data.docs[index].data() as Map<String, dynamic>;
+                  switch (document["category"]) {
+                    case "Work":
+                      iconData = Icons.bookmark;
+                      iconColor = Colors.red;
+                      break;
 
-                time: "13 AM",
-              ),
-            ],
-          ),
-        ),
-      ),
+                    case "Food":
+                      iconData = Icons.local_grocery_store_outlined;
+                      iconColor = Colors.lightBlue;
+                      break;
+
+                    case "Exercise":
+                      iconData = Icons.food_bank_rounded;
+                      iconColor = Colors.blue;
+                      break;
+
+                    case "House":
+                      iconData = Icons.house;
+                      iconColor = Colors.blue;
+                      break;
+
+                    case "Family":
+                      iconData = Icons.audiotrack;
+                      iconColor = Colors.teal;
+                      break;
+
+                    case "Shop":
+                      iconData = Icons.money;
+                      iconColor = Colors.blue;
+                      break;
+                    default:
+                      iconData = Icons.book_online;
+                      iconColor = Colors.red;
+                  }
+                  return TodoCard(
+                    title: document["title"],
+                    check: true,
+                    iconBgColor: Colors.white,
+                    iconColor: iconColor,
+                    iconData: iconData,
+                    time: "10AM",
+                  );
+                });
+          }),
     );
   }
 }

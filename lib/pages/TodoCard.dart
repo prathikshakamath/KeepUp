@@ -1,14 +1,15 @@
-
 import 'package:flutter/material.dart';
 
 class TodoCard extends StatelessWidget {
-  const TodoCard({Key key,
-  this.title,
-  this.iconData,
-  this.iconColor,
-  this.time, this.check, this.iconBgColor,
-  }) 
-  : super(key: key);
+  const TodoCard({
+    Key key,
+    this.title,
+    this.iconData,
+    this.iconColor,
+    this.time,
+    this.check,
+    this.iconBgColor,
+  }) : super(key: key);
 
   final String title;
   final IconData iconData;
@@ -59,33 +60,35 @@ class TodoCard extends StatelessWidget {
                         color: iconBgColor,
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: Icon(iconData,
-                      color: iconColor,
+                      child: Icon(
+                        iconData,
+                        color: iconColor,
                       ),
                     ),
                     SizedBox(
                       width: 20,
-                    )
+                    ),
                     Expanded(
                       child: Text(
-                      title,
-                      style: TextStyle(
-                        fontSize: 18,
-                        letterSpacing: 1,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white,
-                      ),
+                        title,
+                        style: TextStyle(
+                          fontSize: 18,
+                          letterSpacing: 1,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                      Text(
-                        time, 
+                    Text(
+                      time,
                       style: TextStyle(
                         fontSize: 15,
                         color: Colors.white,
-                        ),),
+                      ),
+                    ),
                     SizedBox(
                       width: 20,
-                    ), 
+                    ),
                   ],
                 ),
               ),

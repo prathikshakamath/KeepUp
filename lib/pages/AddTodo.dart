@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -9,6 +10,11 @@ class AddToDoPage extends StatefulWidget {
 }
 
 class _AddToDoPageState extends State<AddToDoPage> {
+  TextEditingController _titleController = TextEditingController();
+  TextEditingController _descriptionController = TextEditingController();
+  String type = "";
+  String category = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,11 +84,11 @@ class _AddToDoPageState extends State<AddToDoPage> {
                 ),
                 Row(
                   children: [
-                    chipData("Important", 0xff2664fa),
+                    taskSelect("Important", 0xff2664fa),
                     SizedBox(
                       width: 20,
                     ),
-                    chipData("Not Urgent", 0xff2bc8d9),
+                    taskSelect("Not Urgent", 0xff2bc8d9),
                   ],
                 ),
                 SizedBox(
@@ -103,27 +109,27 @@ class _AddToDoPageState extends State<AddToDoPage> {
                 Wrap(
                   runSpacing: 10,
                   children: [
-                    chipData("Food", 0xffff6d6e),
+                    categorySelect("Food", 0xffff6d6e),
                     SizedBox(
                       width: 20,
                     ),
-                    chipData("Exercise", 0xfff29732),
+                    categorySelect("Exercise", 0xfff29732),
                     SizedBox(
                       width: 20,
                     ),
-                    chipData("House", 0xff6557ff),
+                    categorySelect("House", 0xff6557ff),
                     SizedBox(
                       width: 20,
                     ),
-                    chipData("Work", 0xff234ebd),
+                    categorySelect("Work", 0xff234ebd),
                     SizedBox(
                       width: 20,
                     ),
-                    chipData("Shop", 0xff2bc8d9),
+                    categorySelect("Shop", 0xff2bc8d9),
                     SizedBox(
                       width: 20,
                     ),
-                    chipData("Family", 0xff9bc359),
+                    categorySelect("Family", 0xff9bc359),
                   ],
                 ),
                 SizedBox(
@@ -142,7 +148,17 @@ class _AddToDoPageState extends State<AddToDoPage> {
   }
 
   Widget button() {
-    return Container(
+    return InkWell(
+      onTap: () {
+        FirebaseFirestore.instance.collection('Todo').add({
+          "title": _titleController.text,
+          "task": type,
+          "category": category,
+          "description": _descriptionController.text
+        });
+        Navigator.pop(context);
+      },
+      child: Container(
         height: 56,
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
@@ -161,7 +177,9 @@ class _AddToDoPageState extends State<AddToDoPage> {
               fontWeight: FontWeight.w600,
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   Widget description() {
@@ -173,6 +191,7 @@ class _AddToDoPageState extends State<AddToDoPage> {
         borderRadius: BorderRadius.circular(15),
       ),
       child: TextFormField(
+        controller: _descriptionController,
         style: TextStyle(
           color: Colors.grey,
           fontSize: 17,
@@ -194,23 +213,51 @@ class _AddToDoPageState extends State<AddToDoPage> {
     );
   }
 
-  Widget chipData(String label, int color) {
-    return Chip(
-      backgroundColor: Color(color),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(
-          10,
+  Widget taskSelect(String label, int color) {
+    return InkWell(
+      onTap: () {
+        setState(() {
+          type = label;
+        });
+      },
+      child: Chip(
+        backgroundColor: type == label ? Colors.black : Color(color),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
         ),
-      ),
-      label: Text(
-        label,
-        style: TextStyle(
+        label: Text(label),
+        labelStyle: TextStyle(
           color: Colors.white,
           fontSize: 15,
           fontWeight: FontWeight.w600,
         ),
+        labelPadding: EdgeInsets.symmetric(horizontal: 17, vertical: 3.8),
       ),
-      labelPadding: EdgeInsets.symmetric(horizontal: 17, vertical: 3.8),
+    );
+  }
+
+  Widget categorySelect(String label, int color) {
+    return InkWell(
+      onTap: () {
+        setState(() {
+          category = label;
+        });
+      },
+      child: Chip(
+        backgroundColor: category == label ? Colors.black : Color(color),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+            10,
+          ),
+        ),
+        label: Text(label),
+        labelStyle: TextStyle(
+          color: Colors.white,
+          fontSize: 15,
+          fontWeight: FontWeight.w600,
+        ),
+        labelPadding: EdgeInsets.symmetric(horizontal: 17, vertical: 3.8),
+      ),
     );
   }
 
@@ -223,6 +270,7 @@ class _AddToDoPageState extends State<AddToDoPage> {
         borderRadius: BorderRadius.circular(15),
       ),
       child: TextFormField(
+        controller: _titleController,
         style: TextStyle(
           color: Colors.grey,
           fontSize: 17,
