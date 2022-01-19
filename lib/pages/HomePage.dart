@@ -6,6 +6,7 @@ import '../main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'TodoCard.dart';
+import 'view_data.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -154,15 +155,30 @@ class _HomePageState extends State<HomePage> {
                       iconData = Icons.book_online;
                       iconColor = Colors.red;
                   }
-                  return TodoCard(
-                    title: document["title"],
+                  return InkWell(
+                    onTap: (){
+                      Navigator.push(context,
+                      MaterialPageRoute(
+                        builder: (builder) => ViewData(
+                          document: document,
+                          id:snapshot.data.docs[index].id,
+                        ),
+                        ),
+                        );
+                    },
+                    child: TodoCard(
+                    title: document["title"] == null
+                    ? "Hey There"
+                    : document["title"],
                     check: true,
                     iconBgColor: Colors.white,
                     iconColor: iconColor,
                     iconData: iconData,
                     time: "10AM",
+                    ),
                   );
-                });
+                },
+                );
           }),
     );
   }
