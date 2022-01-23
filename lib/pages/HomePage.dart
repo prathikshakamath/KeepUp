@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:keep_up/pages/AddTodo.dart';
+import 'package:intl/intl.dart';
+import 'package:date_format/date_format.dart';
 
 import '../Service/Auth_Service.dart';
 import '../main.dart';
@@ -16,6 +18,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  DateTime date = DateTime.now();
+
+  String formattedDate =
+      formatDate(DateTime.now(), [dd, '/', mm, '/', yyyy]).toString();
   AuthClass authClass = AuthClass();
   final Stream<QuerySnapshot> _stream =
       FirebaseFirestore.instance.collection("Todo").snapshots();
@@ -26,7 +32,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         backgroundColor: Colors.black87,
         title: Text(
-          "Today's Schedule",
+          "ToDo",
           style: TextStyle(
             fontSize: 34,
             fontWeight: FontWeight.bold,
@@ -49,7 +55,7 @@ class _HomePageState extends State<HomePage> {
                 left: 22,
               ),
               child: Text(
-                "Monday 21",
+                formattedDate,
                 style: TextStyle(
                   fontSize: 33,
                   fontWeight: FontWeight.w600,
@@ -115,70 +121,71 @@ class _HomePageState extends State<HomePage> {
               return Center(child: CircularProgressIndicator());
             }
             return ListView.builder(
-                itemCount: snapshot.data.docs.length,
-                itemBuilder: (context, index) {
-                  IconData iconData;
-                  Color iconColor;
-                  Map<String, dynamic> document =
-                      snapshot.data.docs[index].data() as Map<String, dynamic>;
-                  switch (document["category"]) {
-                    case "Work":
-                      iconData = Icons.bookmark;
-                      iconColor = Colors.red;
-                      break;
+              itemCount: snapshot.data.docs.length,
+              itemBuilder: (context, index) {
+                IconData iconData;
+                Color iconColor;
+                Map<String, dynamic> document =
+                    snapshot.data.docs[index].data() as Map<String, dynamic>;
+                switch (document["category"]) {
+                  case "Work":
+                    iconData = Icons.bookmark;
+                    iconColor = Colors.red;
+                    break;
 
-                    case "Food":
-                      iconData = Icons.local_grocery_store_outlined;
-                      iconColor = Colors.lightBlue;
-                      break;
+                  case "Food":
+                    iconData = Icons.local_grocery_store_outlined;
+                    iconColor = Colors.lightBlue;
+                    break;
 
-                    case "Exercise":
-                      iconData = Icons.food_bank_rounded;
-                      iconColor = Colors.blue;
-                      break;
+                  case "Exercise":
+                    iconData = Icons.food_bank_rounded;
+                    iconColor = Colors.blue;
+                    break;
 
-                    case "House":
-                      iconData = Icons.house;
-                      iconColor = Colors.blue;
-                      break;
+                  case "House":
+                    iconData = Icons.house;
+                    iconColor = Colors.blue;
+                    break;
 
-                    case "Family":
-                      iconData = Icons.audiotrack;
-                      iconColor = Colors.teal;
-                      break;
+                  case "Family":
+                    iconData = Icons.audiotrack;
+                    iconColor = Colors.teal;
+                    break;
 
-                    case "Shop":
-                      iconData = Icons.money;
-                      iconColor = Colors.blue;
-                      break;
-                    default:
-                      iconData = Icons.book_online;
-                      iconColor = Colors.red;
-                  }
-                  return InkWell(
-                    onTap: (){
-                      Navigator.push(context,
+                  case "Shop":
+                    iconData = Icons.money;
+                    iconColor = Colors.blue;
+                    break;
+                  default:
+                    iconData = Icons.book_online;
+                    iconColor = Colors.red;
+                }
+                return InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
                       MaterialPageRoute(
                         builder: (builder) => ViewData(
                           document: document,
-                          id:snapshot.data.docs[index].id,
+                          id: snapshot.data.docs[index].id,
                         ),
-                        ),
-                        );
-                    },
-                    child: TodoCard(
+                      ),
+                    );
+                  },
+                  child: TodoCard(
                     title: document["title"] == null
-                    ? "Hey There"
-                    : document["title"],
+                        ? "Hey There"
+                        : document["title"],
                     check: true,
                     iconBgColor: Colors.white,
                     iconColor: iconColor,
                     iconData: iconData,
                     time: "10AM",
-                    ),
-                  );
-                },
+                  ),
                 );
+              },
+            );
           }),
     );
   }
