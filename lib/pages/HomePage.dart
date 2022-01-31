@@ -25,6 +25,7 @@ class _HomePageState extends State<HomePage> {
   AuthClass authClass = AuthClass();
   final Stream<QuerySnapshot> _stream =
       FirebaseFirestore.instance.collection("Todo").snapshots();
+      List<Select> selected = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,13 +55,33 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.only(
                 left: 22,
               ),
-              child: Text(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
                 formattedDate,
                 style: TextStyle(
                   fontSize: 33,
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
                 ),
+              ),
+              IconButton(
+            onPressed: () {
+              var instance = FirebaseFirestore.instance
+              .collection('Todo');
+              for(int i=0; i<selected.length; i++)
+              {
+                instance.;
+              }
+              },
+            icon: Icon(
+              Icons.delete,
+              color: Colors.red,
+              size: 28,
+            ),
+          ),
+                ],
               ),
             ),
           ),
@@ -161,6 +182,7 @@ class _HomePageState extends State<HomePage> {
                     iconData = Icons.book_online;
                     iconColor = Colors.red;
                 }
+                selected.add(Select(id:snapshot.data.docs[index].id,checkValue: false ));
                 return InkWell(
                   onTap: () {
                     Navigator.push(
@@ -177,11 +199,13 @@ class _HomePageState extends State<HomePage> {
                     title: document["title"] == null
                         ? "Hey There"
                         : document["title"],
-                    check: true,
+                    check: selected[index].checkValue,
                     iconBgColor: Colors.white,
                     iconColor: iconColor,
                     iconData: iconData,
                     time: "10AM",
+                    index: index,
+                    onChange: onChange,
                   ),
                 );
               },
@@ -189,4 +213,16 @@ class _HomePageState extends State<HomePage> {
           }),
     );
   }
+
+  void onChange(int index) {
+    setState(() {
+      selected[index].checkValue = !selected[index].checkValue;
+    });
+  }
+}
+
+class Select{
+  String id;
+  bool checkValue = false;
+  Select({this.id, this.checkValue});
 }
