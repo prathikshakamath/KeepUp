@@ -36,14 +36,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final amountController = TextEditingController();
 
-  final List<Transaction> _userTransactions = [
-    Transaction(
+  final List<Transactionx> _userTransactions = [
+    Transactionx(
       id: 't1',
       title: 'New Shoes',
       amount: 20.99,
       date: DateTime.now(),
     ),
-    Transaction(
+    Transactionx(
       id: 't2',
       title: 'Grocery',
       amount: 15.45,
@@ -52,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
   ];
 
   void _addNewTransaction(String title, double amount) {
-    final newTx = Transaction(
+    final newTx = Transactionx(
       id: DateTime.now().toString(),
       title: title,
       amount: amount,
@@ -94,14 +94,6 @@ class _MyHomePageState extends State<MyHomePage> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Card(
-            color: Theme.of(context).backgroundColor,
-            child: Container(
-              child: Text('CHART!'),
-              width: double.infinity,
-            ),
-            elevation: 5,
-          ),
           // NewTransaction(_addNewTransaction),
           TransactionList(_userTransactions),
         ],
