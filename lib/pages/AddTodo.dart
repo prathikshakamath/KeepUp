@@ -1,6 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+
+class user {
+  FirebaseAuth auth;
+  user() {
+    auth = FirebaseAuth.instance;
+  }
+
+  String inputData() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    return uid;
+  }
+}
 
 class AddToDoPage extends StatefulWidget {
   const AddToDoPage({Key key}) : super(key: key);
@@ -8,6 +22,9 @@ class AddToDoPage extends StatefulWidget {
   @override
   _AddToDoPageState createState() => _AddToDoPageState();
 }
+
+final user u1 = new user();
+final String id = u1.inputData();
 
 class _AddToDoPageState extends State<AddToDoPage> {
   TextEditingController _titleController = TextEditingController();
@@ -154,7 +171,10 @@ class _AddToDoPageState extends State<AddToDoPage> {
           "title": _titleController.text,
           "task": type,
           "category": category,
-          "description": _descriptionController.text
+          "description": _descriptionController.text,
+          "id": id,
+          "time": DateTime.now(),
+          "done": false,
         });
         Navigator.pop(context);
       },

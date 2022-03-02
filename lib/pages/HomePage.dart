@@ -66,20 +66,6 @@ class _HomePageState extends State<HomePage> {
                       color: Colors.white,
                     ),
                   ),
-                  IconButton(
-                    onPressed: () {
-                      var instance =
-                          FirebaseFirestore.instance.collection('Todo');
-                      for (int i = 0; i < selected.length; i++) {
-                        instance.doc().delete();
-                      }
-                    },
-                    icon: Icon(
-                      Icons.delete,
-                      color: Colors.red,
-                      size: 28,
-                    ),
-                  ),
                 ],
               ),
             ),
