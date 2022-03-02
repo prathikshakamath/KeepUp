@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class user {
   FirebaseAuth auth;
@@ -35,8 +37,7 @@ class _NewTransactionState extends State<NewTransaction> {
     final enteredTitle = titleController.text;
     final enteredAmount = double.parse(amountController.text);
     if (enteredTitle.isEmpty || enteredAmount <= 0) return;
-    //widget.addTx(enteredTitle, enteredAmount); // way to use widget function
-
+    widget.addTx(enteredTitle, enteredAmount); // way to use widget function
     final user u1 = new user();
     final String id = u1.inputData();
 
@@ -46,7 +47,6 @@ class _NewTransactionState extends State<NewTransaction> {
       "id": id,
       "time": DateTime.now()
     });
-
     Navigator.of(context).pop();
   }
 

@@ -1,37 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-
-import '../Service/Auth_Service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-//import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/transaction.dart';
-
-class user {
-  FirebaseAuth auth;
-  user() {
-    auth = FirebaseAuth.instance;
-  }
-
-  String inputData() {
-    final User user = auth.currentUser;
-    final uid = user.uid;
-    return uid;
-  }
-}
-
-final user u1 = new user();
-final String id = u1.inputData();
 
 class TransactionList extends StatelessWidget {
   //const TransactionList({ Key? key }) : super(key: key);
   final List<Transactionx> userTransactions;
-
-  final Stream<QuerySnapshot> _stream = FirebaseFirestore.instance
-      .collection("Todo")
-      .where("id", isEqualTo: id)
-      .snapshots();
 
   TransactionList(this.userTransactions);
 
@@ -53,7 +27,7 @@ class TransactionList extends StatelessWidget {
                 ),
                 padding: const EdgeInsets.all(10),
                 child: Text(
-                  '\$${userTransactions[index].amount.toStringAsFixed(2)}', // tx.amount.toString(),
+                  'Rs.${userTransactions[index].amount.toStringAsFixed(2)}', // tx.amount.toString(),
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 18,
