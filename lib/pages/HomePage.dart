@@ -185,25 +185,29 @@ class _HomePageState extends State<HomePage> {
                     title: document["title"] == null
                         ? "Hey There"
                         : document["title"],
-                    check: selected[index].checkValue,
+                    check: document["done"],
                     iconBgColor: Colors.white,
                     iconColor: iconColor,
                     iconData: iconData,
                     time: "10AM",
                     index: index,
-                    onChange: onChange,
+                    onChange: (int index) {
+                      FirebaseFirestore.instance
+                          .collection('Todo')
+                          .doc(selected[index].id)
+                          .update({"done": !document["done"]});
+                      print(document["done"]);
+                      setState(() {
+                        selected[index].checkValue =
+                            !selected[index].checkValue;
+                      });
+                    },
                   ),
                 );
               },
             );
           }),
     );
-  }
-
-  void onChange(int index) {
-    setState(() {
-      selected[index].checkValue = !selected[index].checkValue;
-    });
   }
 }
 
