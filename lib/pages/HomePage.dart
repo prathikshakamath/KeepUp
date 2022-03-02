@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
   AuthClass authClass = AuthClass();
   final Stream<QuerySnapshot> _stream =
       FirebaseFirestore.instance.collection("Todo").snapshots();
-      List<Select> selected = [];
+  List<Select> selected = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,28 +59,27 @@ class _HomePageState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                formattedDate,
-                style: TextStyle(
-                  fontSize: 33,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                ),
-              ),
-              IconButton(
-            onPressed: () {
-              var instance = FirebaseFirestore.instance
-              .collection('Todo');
-              for(int i=0; i<selected.length; i++)
-              {
-                instance.;
-              }
-              },
-            icon: Icon(
-              Icons.delete,
-              color: Colors.red,
-              size: 28,
-            ),
-          ),
+                    formattedDate,
+                    style: TextStyle(
+                      fontSize: 33,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      var instance =
+                          FirebaseFirestore.instance.collection('Todo');
+                      for (int i = 0; i < selected.length; i++) {
+                        instance.doc().delete();
+                      }
+                    },
+                    icon: Icon(
+                      Icons.delete,
+                      color: Colors.red,
+                      size: 28,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -182,7 +181,8 @@ class _HomePageState extends State<HomePage> {
                     iconData = Icons.book_online;
                     iconColor = Colors.red;
                 }
-                selected.add(Select(id:snapshot.data.docs[index].id,checkValue: false ));
+                selected.add(Select(
+                    id: snapshot.data.docs[index].id, checkValue: false));
                 return InkWell(
                   onTap: () {
                     Navigator.push(
@@ -221,7 +221,7 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class Select{
+class Select {
   String id;
   bool checkValue = false;
   Select({this.id, this.checkValue});
