@@ -4,14 +4,33 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:keep_up/pages/AddTodo.dart';
 import 'package:intl/intl.dart';
 import 'package:date_format/date_format.dart';
+import 'package:keep_up/pages/SignInPage.dart';
 import 'package:keep_up/pages/fin_home.dart';
 
 import '../Service/Auth_Service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import '../main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'TodoCard.dart';
 import 'view_data.dart';
+
+class user {
+  FirebaseAuth auth;
+  user() {
+    auth = FirebaseAuth.instance;
+  }
+
+  String inputData() {
+    final User user = auth.currentUser;
+    final uid = user.uid;
+    return uid;
+  }
+}
+
+final user u1 = new user();
+final String id = u1.inputData();
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -26,8 +45,11 @@ class _HomePageState extends State<HomePage> {
   String formattedDate =
       formatDate(DateTime.now(), [dd, '/', mm, '/', yyyy]).toString();
   AuthClass authClass = AuthClass();
-  final Stream<QuerySnapshot> _stream =
-      FirebaseFirestore.instance.collection("Todo").snapshots();
+
+  final Stream<QuerySnapshot> _stream = FirebaseFirestore.instance
+      .collection("Todo")
+      .where("id", isEqualTo: id)
+      .snapshots();
   List<Select> selected = [];
   @override
   Widget build(BuildContext context) {
@@ -80,10 +102,29 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.black87,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-              size: 32,
-              color: Colors.white,
+            icon: InkWell(
+              onTap: () {
+                final FirebaseAuth _auth = FirebaseAuth.instance;
+
+                Future<void> _signOut() async {
+                  await _auth.signOut();
+                }
+
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (builder) => SignInPage()));
+              },
+              child: Container(
+                  height: 52,
+                  width: 52,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                  ),
+                  child: Icon(
+                    Icons.logout_sharp,
+                    size: 32,
+                    color: Colors.black,
+                  )),
             ),
             title: Container(),
           ),
@@ -131,10 +172,14 @@ class _HomePageState extends State<HomePage> {
                   //     ],
                   //   ),
                   // ),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                  ),
                   child: Icon(
                     Icons.monetization_on_outlined,
                     size: 32,
-                    color: Colors.white,
+                    color: Colors.black,
                   )),
             ),
             title: Container(),
@@ -162,6 +207,7 @@ class _HomePageState extends State<HomePage> {
             if (!snapshot.hasData) {
               return Center(child: CircularProgressIndicator());
             }
+
             return ListView.builder(
               itemCount: snapshot.data.docs.length,
               itemBuilder: (context, index) {
@@ -169,6 +215,10 @@ class _HomePageState extends State<HomePage> {
                 Color iconColor;
                 Map<String, dynamic> document =
                     snapshot.data.docs[index].data() as Map<String, dynamic>;
+                // for (int i = 0; i <= snapshot.data.docs.length; i++) {
+                //   print(id);
+                //   print(document["id"]);
+                //while (document["id"] != id) {
                 switch (document["category"]) {
                   case "Work":
                     iconData = Icons.bookmark;
@@ -225,7 +275,9 @@ class _HomePageState extends State<HomePage> {
                     iconBgColor: Colors.white,
                     iconColor: iconColor,
                     iconData: iconData,
-                    time: "10AM",
+                    time: formatDate(
+                        DateTime.parse(document["time"].toDate().toString()),
+                        [hh, ':', mm, ' ', am]).toString(),
                     index: index,
                     onChange: (int index) {
                       FirebaseFirestore.instance
@@ -240,6 +292,8 @@ class _HomePageState extends State<HomePage> {
                     },
                   ),
                 );
+                //}
+                // }
               },
             );
           }),
