@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_if_null_operators
 
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:keep_up/pages/AddTodo.dart';
 import 'package:intl/intl.dart';
@@ -275,9 +276,11 @@ class _HomePageState extends State<HomePage> {
                     iconBgColor: Colors.white,
                     iconColor: iconColor,
                     iconData: iconData,
-                    time: formatDate(
-                        DateTime.parse(document["time"].toDate().toString()),
-                        [hh, ':', mm, ' ', am]).toString(),
+                    time: //formatDate(
+                        //DateTime.parse(document["time"].toDate().toString()),
+                        //[HH, ':', MM, ' ', am]).toString(),
+                         DateFormat.yMMMMd().format(document["time"]
+                        .toDate()),
                     index: index,
                     onChange: (int index) {
                       FirebaseFirestore.instance
