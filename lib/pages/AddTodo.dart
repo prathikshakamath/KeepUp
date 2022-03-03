@@ -95,7 +95,7 @@ class _AddToDoPageState extends State<AddToDoPage> {
                 SizedBox(
                   height: 30,
                 ),
-                label("Task Type"),
+                label("Urgent or Not"),
                 SizedBox(
                   height: 12,
                 ),
@@ -313,7 +313,7 @@ class _AddToDoPageState extends State<AddToDoPage> {
 
   Widget label(String label) {
     return Text(
-      "Task Title",
+      label,
       style: TextStyle(
         color: Colors.white,
         fontWeight: FontWeight.w600,
